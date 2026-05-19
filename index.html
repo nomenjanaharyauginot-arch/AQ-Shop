@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQ Shop - Plateforme E-Commerce Complète</title>
+  <style>
+    /* 🎨 RACINE ET THÈMES VISUELS */
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --accent: #2563eb;
+      --accent-hover: #3b82f6;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    nav {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0; z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+    .logo { font-size: 24px; font-weight: 800; color: var(--text); cursor: pointer; }
+    .logo span { color: var(--accent); }
+    .nav-actions { display: flex; align-items: center; gap: 15px; }
+    .btn-nav {
+      background: none; border: none; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 6px;
+    }
+    .btn-nav:hover { background-color: var(--bg); }
+    .cart-badge { background-color: var(--accent); color: white; font-size: 12px; padding: 2px 7px; border-radius: 10px; font-weight: bold; }
+    .user-welcome { font-size: 13px; font-weight: bold; color: var(--accent); }
+
+    .container { max-width: 1200px; width: 95%; margin: 30px auto; flex: 1; display: none; }
+    .container.active { display: block; }
+    .storefront-layout { display: grid; grid-template-columns: 3fr 1fr; gap: 30px; }
+    @media (max-width: 950px) { .storefront-layout { grid-template-columns: 1fr; } }
+
+    .auth-box { max-width: 400px; margin: 60px auto; background-color: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid var(--border); }
+    .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; color: var(--text-muted); }
+    .auth-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); margin-bottom: -2px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px; }
+    .form-group label { font-size: 12px; font-weight: bold; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 10px; border: 1px solid var(--border); border-radius: 6px; background-color: var(--bg); color: var(--text); outline: none; font-size: 14px;
+    }
+    .form-group input:focus { border-color: var(--accent); }
+    .btn-action { width: 100%; background-color: var(--accent); color: white; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .btn-action:hover { background-color: var(--accent-hover); }
+
+    .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+    @media (max-width: 850px) { .admin-grid { grid-template-columns: 1fr; } }
+    .admin-card { background-color: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; box-shadow: var(--shadow); }
+    .admin-h2 { font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: var(--accent); }
+
+    .order-table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); }
+    th { background-color: var(--bg); font-weight: bold; }
+    .search-row { margin-bottom: 20px; }
+    .search-input { width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--card-bg); color: var(--text); outline: none; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+    .product-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; }
+    .product-img { width: 100%; height: 180px; object-fit: cover; background-color: #e2e8f0; }
+    .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .product-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; }
+    .product-price { font-size: 16px; font-weight: 800; }
+    .cart-sidebar { background-color: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 10px; box-shadow: var(--shadow); height: fit-content; }
+    .cart-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+    .cart-items-list { max-height: 240px; overflow-y: auto; margin-bottom: 15px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 13px; }
+    .btn-remove-item { background: none; border: none; color: var(--danger); font-size: 14px; cursor: pointer; }
+    .cart-total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--border); }
+    .invoice-box { background: white; color: black; padding: 40px; border-radius: 8px; max-width: 650px; margin: 20px auto; box-shadow: var(--shadow); border: 1px solid #ccc; }
+    .invoice-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+    .btn-print { background-color: var(--accent); color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 15px; display: inline-block; }
+    footer { background-color: var(--card-bg); border-top: 1px solid var(--border); padding: 25px; text-align: center; margin-top: auto; }
+    .admin-contacts { display: flex; justify-content: center; gap: 15px; font-weight: bold; margin-top: 8px; flex-wrap: wrap; }
+    .contact-link { color: var(--accent); text-decoration: none; padding: 6px 12px; border: 1px solid var(--border); border-radius: 4px; background-color: var(--bg); font-size: 13px; }
+    @media print {
+      body * { display: none !important; }
+      #printArea, #printArea * { display: block !important; }
+      .btn-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🧭 BARRE DE NAVIGATION -->
+  <nav>
+    <div class="logo" onclick="navigateTo('storefrontPage')">AQ<span>Shop</span></div>
+    <div class="nav-actions">
+      <span id="userGreeting" class="user-welcome"></span>
+      <button id="navAdminLink" class="btn-nav" style="display:none;" onclick="navigateTo('adminPage')">🛠️ Dashboard Admin</button>
+      <button id="navStoreLink" class="btn-nav" style="display:none;" onclick="navigateTo('storefrontPage')">🛍️ Boutique</button>
+      <button id="navAuthLink" class="btn-nav" onclick="navigateTo('authPage')">🔑 Connexion</button>
+      <button id="navLogoutLink" class="btn-nav" style="display:none;" onclick="processLogout()">🚪 Déconnexion</button>
+      <button class="btn-nav" onclick="toggleTheme()">🌓 Thème</button>
+    </div>
+  </nav>
+
+  <!-- 🔑 COMPOSANT 1: PAGE COMPTE (CONNEXION / INSCRIPTION) -->
+  <div id="authPage" class="container active">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <div id="tabLogin" class="auth-tab active" onclick="switchAuthTab('login')">Se connecter</div>
+        <div id="tabRegister" class="auth-tab" onclick="switchAuthTab('register')">S'inscrire</div>
+      </div>
+      <!-- Formulaire -->
+      <form id="authForm" onsubmit="handleAuthSubmit(event)">
+        <div class="form-group" id="groupName" style="display: none;">
+          <label for="authName">Nom complet</label>
+          <input type="text" id="authName" placeholder="Ex: Jean Dupont">
+        </div>
+        <div class="form-group">
+          <label for="authEmail">Adresse Email</label>
+          <input type="email" id="authEmail" required placeholder="client@example.com">
+        </div>
+        <div class="form-group" id="groupPhone" style="display: none;">
+          <label for="authPhone">Numéro de Téléphone</label>
+          <input type="tel" id="authPhone" placeholder="Ex: 0340000000">
+        </div>
+        <div class="form-group">
+          <label for="authPassword">Mot de passe</label>
+          <input type="password" id="authPassword" required placeholder="••••••••">
+        </div>
+        <div class="form-group" id="groupConfirmPassword" style="display:none;">
+          <label for="authConfirmPassword">Confirmer le mot de passe</label>
+          <input type="password" id="authConfirmPassword" placeholder="Retapez le mot de passe">
+        </div>
+        <button type="submit" class="btn-action" id="authSubmitBtn">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🛍️ COMPOSANT 2: VITRINE DE VENTE ET PANIER CLIENT -->
+  <div id="storefrontPage" class="container">
+    <div class="storefront-layout">
+      <div>
+        <div class="search-row">
+          <input type="text" class="search-input" id="searchField" placeholder="🔍 Rechercher un article par son nom..." oninput="renderStorefront()">
+        </div>
+        <div class="products-grid" id="productsDisplayGrid"></div>
+      </div>
+      <aside class="cart-sidebar">
+        <div class="cart-title">Mon Panier Client</div>
+        <div class="cart-items-list" id="cartItemsContainer"></div>
+        <div class="cart-total-row">
+          <span>Total :</span>
+          <span id="cartTotalValue">0 Ar</span>
+        </div>
+        <button class="btn-checkout" style="background-color: var(--success);" onclick="processOrderCheckout()">Commander & Valider</button>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 🛠️ COMPOSANT 3: DASHBOARD ADMINISTRATEUR (GESTION STOCK & COMMANDES REÇUES) -->
+  <div id="adminPage" class="container">
+    <div class="admin-grid">
+      <div class="admin-card">
+        <div class="admin-h2">📦 Ajouter un Article</div>
+        <div class="form-group">
+          <label for="prodTitle">Nom du produit</label>
+          <input type="text" id="prodTitle" placeholder="Ex: Chaussures running">
+        </div>
+        <div class="form-group">
+          <label for="prodPrice">Prix (Ar)</label>
+          <input type="number" id="prodPrice" placeholder="Ex: 65000">
+        </div>
+        <div class="form-group">
+          <label for="prodImageFile">Image de l'article</label>
+          <input type="file" id="prodImageFile" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label for="prodDesc">Description technique</label>
+          <textarea id="prodDesc" rows="3" placeholder="Caractéristiques de l'article..."></textarea>
+        </div>
+        <button class="btn-action" style="background-color: var(--success);" onclick="processAdminUpload()">Publier l'article</button>
+      </div>
+      <div class="admin-card">
+        <div class="admin-h2">📋 Commandes Clients reçues (À Contacter)</div>
+        <div class="order-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Client / Contact</th>
+                <th>Articles Commandés</th>
+                <th>Total Facturé</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrderTableBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧾 COMPOSANT 4: FACTURE CLIENT IMPRIMABLE -->
+  <div id="invoicePage" class="container">
+    <div style="text-align: center; margin-bottom: 15px;">
+      <button class="btn-nav" style="background-color: var(--border);" onclick="navigateTo('storefrontPage')">← Retour à la boutique</button>
+    </div>
+    <div id="printArea">
+      <div class="invoice-box" id="invoiceContent"></div>
+    </div>
+    <div style="text-align: center;">
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimer la Facture Papier</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 <strong>AQ Shop</strong>. Tous droits de vente réservés.</p>
+    <div class="admin-contacts">
+      <a href="tel:0381762984" class="contact-link">📞 Service Ventes : 038 17 629 84</a>
+      <a href="tel:0379280801" class="contact-link">📞  037 92 808 01</a>
+    </div>
+  </footer>
+
+  <script>
+    // 1. BASE DE DONNÉES SIMULÉE EN LOCALSTORAGE
+    let inventory = [
+      { id: 1, title: "Montre Connectée Pro", price: 250000, desc: "Suivi cardiaque, notifications d'appels, étanche jusqu'à 50m.", img: "https://picsum.photos" },
+      { id: 2, title: "Écouteurs Sans Fil Sport", price: 110000, desc: "Réduction de bruit active, autonomie de 24h avec boîtier.", img: "https://picsum.photos" }
+    ];
+    let users = [{ email: "admin@aq.com", password: "admin", name: "Admin AQ", phone: "0381762984", isAdmin: true }];
+    let orders = [];
+    let currentUser = null;
+    let shoppingCart = [];
+    let currentAuthMode = "login";
+
+    // 2. ROUTER DU SINGLE PAGE APPLICATION (SPA)
+    function navigateTo(pageId) {
+      document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.getElementById("navStoreLink").style.display = currentUser ? "inline-block" : "none";
+      document.getElementById("navAdminLink").style.display = (currentUser && currentUser.isAdmin) ? "inline-block" : "none";
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      document.getElementById("tabLogin").classList.toggle("active", mode === 'login');
+      document.getElementById("tabRegister").classList.toggle("active", mode === 'register');
+      document.getElementById("groupName").style.display = mode === 'register' ? 'flex' : 'none';
+      document.getElementById("groupPhone").style.display = mode === 'register' ? 'flex' : 'none';
+      document.getElementById("groupConfirmPassword").style.display = mode === 'register' ? 'flex' : 'none';
+      document.getElementById("authSubmitBtn").innerText = mode === 'login' ? 'Connexion' : 'Créer mon compte';
+    }
+
+    // 3. MOTEUR D'AUTHENTIFICATION UTILISATEURS
+    function handleAuthSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById("authEmail").value.trim().toLowerCase();
+      const password = document.getElementById("authPassword").value;
+
+      if (currentAuthMode === "login") {
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+          currentUser = user;
+          executeUserSessionLogin();
+        } else {
+          alert("Identifiants incorrects. Veuillez réessayer.");
+        }
+      } else {
+        const name = document.getElementById("authName").value.trim();
+        const phone = document.getElementById("authPhone").value.trim();
+        const confirmPassword = document.getElementById("authConfirmPassword").value;
+        if (!name || !phone) { alert("Veuillez remplir l'ensemble des coordonnées."); return; }
+        if (password.length < 6) { alert("Le mot de passe doit contenir au moins 6 caractères."); return; }
+        if (password !== confirmPassword) { alert("Les mots de passe ne correspondent pas."); return; }
+        if (users.some(u => u.email === email)) { alert("Cette adresse mail possède déjà un compte actif."); return; }
+        const newUser = { email, password, name, phone, isAdmin: false };
+        users.push(newUser);
+        saveToLocalStorage();
+        currentUser = newUser;
+        executeUserSessionLogin();
+      }
+      document.getElementById("authForm").reset();
+    }
+
+    function executeUserSessionLogin() {
+      document.getElementById("userGreeting").innerText = `Bonjour, ${currentUser.name} !`;
+      document.getElementById("navAuthLink").style.display = "none";
+      document.getElementById("navLogoutLink").style.display = "inline-block";
+      if (currentUser.isAdmin) {
+        renderAdminDashboard();
+        navigateTo("adminPage");
+      } else {
+        renderStorefront();
+        navigateTo("storefrontPage");
+      }
+    }
+
+    function processLogout() {
+      currentUser = null;
+      shoppingCart = [];
+      syncBasketUI();
+      document.getElementById("userGreeting").innerText = "";
+      document.getElementById("navAuthLink").style.display = "inline-block";
+      document.getElementById("navLogoutLink").style.display = "none";
+      document.getElementById("navAdminLink").style.display = "none";
+      document.getElementById("navStoreLink").style.display = "none";
+      switchAuthTab("login");
+      navigateTo("authPage");
+    }
+
+    // 4. RENDU DE LA VITRINE COMMERCIALE (POUR CLIENTS)
+    function renderStorefront() {
+      const grid = document.getElementById("productsDisplayGrid");
+      const searchQuery = document.getElementById("searchField").value.toLowerCase().trim();
+      grid.innerHTML = "";
+      const filtered = inventory.filter(item => item.title.toLowerCase().includes(searchQuery));
+      filtered.forEach(item => {
+        grid.innerHTML += `
+          <div class="product-card">
+            <img src="${item.img}" alt="${item.title}" class="product-img">
+            <div class="product-info">
+              <div>
+                <div class="product-title">${item.title}</div>
+                <div class="product-desc">${item.desc}</div>
+              </div>
+              <div class="product-footer">
+                <div class="product-price">${item.price.toLocaleString()} Ar</div>
+                <button class="btn-add-cart" onclick="addItemToBasket(${item.id})">Acheter</button>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+
+    // 5. GESTION DU PANIER INTERACTIF
+    function addItemToBasket(productId) {
+      if (!currentUser) { alert("Veuillez vous connecter pour ajouter des articles à votre panier."); navigateTo("authPage"); return; }
+      const item = inventory.find(i => i.id === productId);
+      const matched = shoppingCart.find(i => i.id === productId);
+      if (matched) matched.quantity++;
+      else shoppingCart.push({ ...item, quantity: 1 });
+      syncBasketUI();
+    }
+
+    function dropUnitFromBasket(productId) {
+      shoppingCart = shoppingCart.filter(item => item.id !== productId);
+      syncBasketUI();
+    }
+
+    function syncBasketUI() {
+      const container = document.getElementById("cartItemsContainer");
+      container.innerHTML = "";
+      let totalCount = 0, billSum = 0;
+      shoppingCart.forEach(item => {
+        totalCount += item.quantity;
+        billSum += (item.price * item.quantity);
+        container.innerHTML += `
+          <div class="cart-item">
+            <div class="cart-item-info">
+              <strong>${item.title}</strong>
+              <span class="cart-item-qty">${item.quantity} × ${item.price.toLocaleString()} Ar</span>
+            </div>
+            <div>
+              <button class="btn-remove-item" onclick="dropUnitFromBasket(${item.id})">🗑️</button>
+            </div>
+          </div>`;
+      });
+      // Optionally update cart count badge if used somewhere
+      // document.getElementById("cartCount").innerText = totalCount;
+      document.getElementById("cartTotalValue").innerText = billSum.toLocaleString() + " Ar";
+    }
+
+    // 6. PROCESSUS DE VALIDATION DE COMMANDE & FACTURATION DE L'INVOICE
+    function processOrderCheckout() {
+      if (shoppingCart.length === 0) { alert("Votre panier est vide."); return; }
+      const newOrder = {
+        orderId: "AQ-" + Date.now(),
+        clientName: currentUser.name,
+        clientEmail: currentUser.email,
+        clientPhone: currentUser.phone,
+        items: [...shoppingCart],
+        totalPrice: document.getElementById("cartTotalValue").innerText,
+        date: new Date().toLocaleDateString('fr-FR')
+      };
+      orders.push(newOrder);
+      saveToLocalStorage();
+      generatePrintableInvoice(newOrder);
+      shoppingCart = [];
+      syncBasketUI();
+      navigateTo("invoicePage");
+    }
+
+    function generatePrintableInvoice(order) {
+      const container = document.getElementById("invoiceContent");
+      let itemsLines = "";
+      order.items.forEach(item => {
+        itemsLines += `
+          <tr>
+            <td style="padding:8px; border-bottom:1px solid #eee;">${item.title}</td>
+            <td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${item.quantity}</td>
+            <td style="padding:8px; border-bottom:1px solid #eee; text-align:right;">${(item.price * item.quantity).toLocaleString()} Ar</td>
+          </tr>`;
+      });
+      container.innerHTML = `
+        <div class="invoice-header">
+          <div>
+            <h1 style="font-size:26px;">AQ SHOP</h1>
+            <p style="font-size:12px; color:#555;">Antananarivo, Madagascar</p>
+          </div>
+          <div style="text-align:right;">
+            <h2 style="font-size:18px; color:var(--accent);">FACTURE</h2>
+            <p style="font-size:13px;"><b>N° :</b> ${order.orderId}</p>
+            <p style="font-size:13px;"><b>Date :</b> ${order.date}</p>
+          </div>
+        </div>
+        <div style="margin-bottom:25px; font-size:14px;">
+          <p><b>Facturé à :</b> ${order.clientName}</p>
+          <p><b>Email :</b> ${order.clientEmail}</p>
+          <p><b>Téléphone :</b> ${order.clientPhone}</p>
+        </div>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+          <thead>
+            <th style="text-align:left; border-bottom:2px solid #000; padding:8px;">Désignation</th>
+            <th style="text-align:center; border-bottom:2px solid #000; padding:8px;">Qté</th>
+            <th style="text-align:right; border-bottom:2px solid #000; padding:8px;">Prix Total</th>
+          </thead>
+          <tbody>${itemsLines}</tbody>
+        </table>
+        <div style="text-align:right; font-size:18px; font-weight:bold; margin-top:20px; border-top:2px solid #000; padding-top:10px;">
+          Montant Total Net : ${order.totalPrice}
+        </div>
+        <div style="margin-top:40px; font-size:11px; text-align:center; color:#555; border-top:1px dashed #ccc; padding-top:15px;">
+          Merci pour votre confiance chez AQ Shop ! Notre service de livraison vous contactera sous peu.
+        </div>`;
+    }
+
+    // 7. GESTION DES STRATÉGIES DE L'ADMINISTRATEUR (STOCK ET VISUALISATION DU LOG COMMANDES)
+    function renderAdminDashboard() {
+      const tbody = document.getElementById("adminOrderTableBody");
+      tbody.innerHTML = "";
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Aucune commande enregistrée pour le moment.</td></tr>`;
+        return;
+      }
+      orders.forEach(order => {
+        let itemsSummary = order.items.map(i => `${i.title} (x${i.quantity})`).join(", ");
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <strong>${order.clientName}</strong><br>
+              <span style="color:var(--accent); font-weight:bold;">📞 ${order.clientPhone}</span><br>
+              <span style="font-size:11px; color:var(--text-muted);">${order.clientEmail}</span>
+            </td>
+            <td style="color:var(--text-muted);">${itemsSummary}</td>
+            <td style="font-weight:bold; color:var(--success);">${order.totalPrice}</td>
+          </tr>`;
+      });
+    }
+
+    function processAdminUpload() {
+      const title = document.getElementById("prodTitle").value.trim();
+      const price = parseFloat(document.getElementById("prodPrice").value);
+      const desc = document.getElementById("prodDesc").value.trim();
+      const fileInput = document.getElementById("prodImageFile");
+      if (!title || isNaN(price) || price <= 0 || !desc) { alert("Veuillez remplir toutes les cases."); return; }
+      const saveItem = (imageSrc) => {
+        inventory.push({ id: Date.now(), title, price, desc, img: imageSrc });
+        saveToLocalStorage();
+        renderStorefront();
+        document.getElementById("prodTitle").value = "";
+        document.getElementById("prodPrice").value = "";
+        document.getElementById("prodDesc").value = "";
+        document.getElementById("prodImageFile").value = "";
+        alert(`L'article "${title}" a été publié.`);
+      };
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => saveItem(e.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveItem("https://picsum.photos");
+      }
+    }
+
+    // 8. PERSISTENCE LOGIQUE
+    function toggleTheme() {
+      const active = document.documentElement.getAttribute("data-theme");
+      const target = active === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("aq-shop-theme", target);
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("aq-shop-inventory", JSON.stringify(inventory));
+      localStorage.setItem("aq-shop-users", JSON.stringify(users));
+      localStorage.setItem("aq-shop-orders", JSON.stringify(orders));
+    }
+
+    // Optional: load persisted data at startup
+    (function initSetup() {
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("aq-shop-theme") || "light");
+      try {
+        inventory = JSON.parse(localStorage.getItem("aq-shop-inventory")) || inventory;
+        users = JSON.parse(localStorage.getItem("aq-shop-users")) || users;
+        orders = JSON.parse(localStorage.getItem("aq-shop-orders")) || orders;
+      } catch(err) {}
+      switchAuthTab("login");
+      renderStorefront();
+    })();
+  </script>
+</body>
+</html>
