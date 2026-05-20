@@ -46,6 +46,8 @@
       position: sticky;
       top: 0; z-index: 1000;
       box-shadow: var(--shadow);
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     .nav-left {
@@ -165,6 +167,39 @@
     .menu-overlay.open {
       opacity: 1;
       pointer-events: all;
+    }
+
+    /* 🏷️ NAVBAR CATEGORIES */
+    .nav-categories {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nav-category-btn {
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      background-color: var(--bg);
+      color: var(--text);
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-category-btn:hover {
+      border-color: var(--accent);
+      background-color: var(--card-bg);
+    }
+
+    .nav-category-btn.active {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
     /* 🛒 CART SECTION */
@@ -366,37 +401,6 @@
 
     .container.active {
       display: block;
-    }
-
-    /* CATEGORY FILTER */
-    .category-filter {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-
-    .category-btn {
-      padding: 10px 18px;
-      border: 2px solid var(--border);
-      background-color: var(--bg);
-      color: var(--text);
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s;
-    }
-
-    .category-btn:hover {
-      border-color: var(--accent);
-      background-color: var(--card-bg);
-    }
-
-    .category-btn.active {
-      background-color: var(--accent);
-      color: white;
-      border-color: var(--accent);
     }
 
     .storefront-layout {
@@ -1083,6 +1087,18 @@
       }
     }
 
+    @media (max-width: 1024px) {
+      nav {
+        flex-direction: column;
+      }
+
+      .nav-categories {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
     @media (max-width: 768px) {
       .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1108,6 +1124,16 @@
       .invoice-box {
         padding: 30px;
       }
+
+      nav {
+        padding: 10px 5%;
+      }
+
+      .nav-categories {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 5px 0;
+      }
     }
   </style>
 </head>
@@ -1119,6 +1145,7 @@
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <div class="logo" onclick="navigateTo('storefrontPage')">AQ<span>Shop</span></div>
     </div>
+    <div class="nav-categories" id="navCategoryFilter"></div>
     <div class="nav-right">
       <button class="cart-btn" onclick="toggleCart()">
         🛒
@@ -1232,7 +1259,7 @@
           </div>
           <div class="form-group">
             <label>Nouveau mot de passe</label>
-            <input type="password" id="newPassword" placeholder="••••��•••" required>
+            <input type="password" id="newPassword" placeholder="••••••••" required>
           </div>
           <div class="form-group">
             <label>Confirmer le mot de passe</label>
@@ -1253,7 +1280,7 @@
   </div>
 
   <!-- 🔑 COMPOSANT 1: PAGE COMPTE (CONNEXION / INSCRIPTION) -->
-  <div id="authPage" class="container active">
+  <div id="authPage" class="container">
     <div class="auth-box">
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login')">Se connecter</button>
@@ -1289,13 +1316,12 @@
   </div>
 
   <!-- 🛍️ COMPOSANT 2: VITRINE DE VENTE -->
-  <div id="storefrontPage" class="container">
+  <div id="storefrontPage" class="container active">
     <div class="storefront-layout">
       <div>
         <div class="search-row">
           <input type="text" class="search-input" id="searchField" placeholder="🔍 Rechercher un article par son nom..." oninput="renderStorefront()">
         </div>
-        <div class="category-filter" id="categoryFilter"></div>
         <div class="products-grid" id="productsDisplayGrid"></div>
       </div>
     </div>
@@ -1517,18 +1543,18 @@
       closeMenu();
     }
 
-    // 6. CATEGORY FILTER
-    function renderCategoryFilter() {
-      const filterDiv = document.getElementById("categoryFilter");
+    // 6. CATEGORY FILTER IN NAVBAR
+    function renderNavCategoryFilter() {
+      const filterDiv = document.getElementById("navCategoryFilter");
       filterDiv.innerHTML = "";
       categories.forEach(cat => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = `category-btn ${cat === selectedCategory ? 'active' : ''}`;
+        btn.className = `nav-category-btn ${cat === selectedCategory ? 'active' : ''}`;
         btn.textContent = `${categoryEmojis[cat]} ${cat}`;
         btn.onclick = () => {
           selectedCategory = cat;
-          renderCategoryFilter();
+          renderNavCategoryFilter();
           renderStorefront();
         };
         filterDiv.appendChild(btn);
@@ -1537,7 +1563,6 @@
 
     // 7. VITRINE COMMERCIALE
     function renderStorefront() {
-      renderCategoryFilter();
       const grid = document.getElementById("productsDisplayGrid");
       const searchQuery = document.getElementById("searchField").value.toLowerCase().trim();
       grid.innerHTML = "";
@@ -2139,18 +2164,12 @@
         if (savedUser) {
           currentUser = JSON.parse(savedUser);
           currentUser = users.find(u => u.email === currentUser.email) || null;
-          if (currentUser) {
-            if (currentUser.isAdmin) {
-              renderAdminDashboard();
-              navigateTo("adminPage");
-            } else {
-              renderStorefront();
-              navigateTo("storefrontPage");
-            }
-          }
         }
       } catch(err) {}
       switchAuthTab("login");
+      renderNavCategoryFilter();
+      renderStorefront();
+      navigateTo("storefrontPage");
       updateMenuVisibility();
       syncBasketUI();
     })();
