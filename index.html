@@ -85,7 +85,7 @@
       color: var(--accent);
     }
 
-    /* ���� SIDE MENU */
+    /* 📋 SIDE MENU */
     .side-menu {
       position: fixed;
       left: -300px;
@@ -255,7 +255,7 @@
     .cart-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       padding: 12px 0;
       border-bottom: 1px dashed var(--border);
       font-size: 13px;
@@ -273,6 +273,12 @@
     .cart-item-qty {
       color: var(--text-muted);
       font-size: 12px;
+    }
+
+    .cart-item-variant {
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-top: 3px;
     }
 
     .quantity-controls {
@@ -362,6 +368,37 @@
       display: block;
     }
 
+    /* CATEGORY FILTER */
+    .category-filter {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 10px 18px;
+      border: 2px solid var(--border);
+      background-color: var(--bg);
+      color: var(--text);
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .category-btn:hover {
+      border-color: var(--accent);
+      background-color: var(--card-bg);
+    }
+
+    .category-btn.active {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
     .storefront-layout {
       display: grid;
       grid-template-columns: 1fr;
@@ -409,11 +446,18 @@
       box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
     }
 
-    .product-img {
+    .product-img-wrapper {
+      position: relative;
       width: 100%;
       height: 180px;
-      object-fit: cover;
+      overflow: hidden;
       background-color: #e2e8f0;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       cursor: pointer;
     }
 
@@ -425,10 +469,35 @@
       justify-content: space-between;
     }
 
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
     .product-title {
       font-size: 16px;
       font-weight: 700;
-      margin-bottom: 6px;
+    }
+
+    .btn-delete-product {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      display: none;
+    }
+
+    .btn-delete-product.admin-visible {
+      display: block;
+    }
+
+    .btn-delete-product:hover {
+      transform: scale(1.2);
     }
 
     .product-desc {
@@ -527,7 +596,9 @@
       font-size: 14px;
     }
 
-    .form-group input:focus {
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
       border-color: var(--accent);
     }
 
@@ -576,6 +647,93 @@
       color: var(--accent);
     }
 
+    .variant-section {
+      background-color: var(--bg);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .variant-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .variant-item input {
+      flex: 1;
+    }
+
+    .btn-remove-variant {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-remove-variant:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-add-variant {
+      background-color: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .btn-add-variant:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .gallery-images {
+      background-color: var(--bg);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .gallery-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .gallery-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+      object-fit: cover;
+      background-color: var(--border);
+    }
+
+    .btn-add-image {
+      background-color: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .btn-add-image:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
     .order-table-wrapper {
       overflow-x: auto;
     }
@@ -598,24 +756,144 @@
       font-weight: bold;
     }
 
+    .btn-delivered {
+      background-color: var(--success);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .btn-delivered:hover {
+      background-color: #15803d;
+    }
+
+    .btn-delivered.delivered {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .status-delivered {
+      color: var(--success);
+      font-weight: bold;
+      padding: 4px 8px;
+      background-color: rgba(22, 163, 74, 0.1);
+      border-radius: 4px;
+      display: inline-block;
+    }
+
     /* INVOICE STYLES */
     .invoice-box {
       background: white;
       color: black;
-      padding: 40px;
+      padding: 50px;
       border-radius: 8px;
-      max-width: 650px;
+      max-width: 800px;
       margin: 20px auto;
       box-shadow: var(--shadow);
-      border: 1px solid #ccc;
+      border: 2px solid #333;
+      font-family: Arial, sans-serif;
     }
 
     .invoice-header {
-      display: flex;
-      justify-content: space-between;
+      text-align: center;
+      border-bottom: 3px solid #000;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
+    }
+
+    .invoice-header h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+      color: #000;
+    }
+
+    .invoice-header p {
+      font-size: 12px;
+      color: #666;
+      margin: 3px 0;
+    }
+
+    .invoice-section {
+      margin-bottom: 25px;
+    }
+
+    .invoice-section-title {
+      font-weight: bold;
+      font-size: 12px;
+      color: #000;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .invoice-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+      font-size: 13px;
+    }
+
+    .invoice-detail-item {
+      line-height: 1.8;
+    }
+
+    .invoice-detail-item strong {
+      color: #333;
+    }
+
+    .invoice-detail-item p {
+      margin: 5px 0;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      font-size: 13px;
+    }
+
+    .invoice-table thead {
+      background-color: #f0f0f0;
       border-bottom: 2px solid #000;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
+    }
+
+    .invoice-table th {
+      padding: 12px;
+      text-align: left;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .invoice-table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .invoice-table tr:last-child td {
+      border-bottom: 2px solid #000;
+    }
+
+    .invoice-total {
+      text-align: right;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      padding-top: 15px;
+      border-top: 2px solid #000;
+    }
+
+    .invoice-footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px dashed #ccc;
+      padding-top: 15px;
+      margin-top: 25px;
     }
 
     .btn-print {
@@ -677,6 +955,7 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
     }
 
     .modal.open {
@@ -685,12 +964,12 @@
 
     .modal-content {
       background-color: var(--card-bg);
-      margin: 10% auto;
+      margin: 5% auto;
       padding: 25px;
       border: 1px solid var(--border);
       border-radius: 10px;
       width: 80%;
-      max-width: 500px;
+      max-width: 600px;
       position: relative;
     }
 
@@ -716,6 +995,46 @@
       max-width: 90%;
       max-height: 80vh;
       border-radius: 8px;
+    }
+
+    /* CHECKOUT MODAL */
+    .checkout-section {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checkout-section h3 {
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .variant-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .variant-option {
+      padding: 8px 12px;
+      border: 2px solid var(--border);
+      background-color: var(--bg);
+      color: var(--text);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .variant-option:hover {
+      border-color: var(--accent);
+    }
+
+    .variant-option.selected {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
     /* PROFILE MODAL */
@@ -777,6 +1096,18 @@
       .logo {
         font-size: 20px;
       }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .invoice-details {
+        grid-template-columns: 1fr;
+      }
+
+      .invoice-box {
+        padding: 30px;
+      }
     }
   </style>
 </head>
@@ -801,7 +1132,7 @@
   <div class="side-menu" id="sideMenu">
     <button class="menu-close" onclick="closeMenu()">✕</button>
     <div class="menu-items">
-      <button class="menu-item" id="menuBoutique" style="display:none;" onclick="navigateTo('storefrontPage'); closeMenu();">🛍️ Boutique</button>
+      <button class="menu-item" onclick="navigateTo('storefrontPage'); closeMenu();">🛍️ Boutique</button>
       <button class="menu-item" id="menuProfil" style="display:none;" onclick="openProfileModal(); closeMenu();">👤 Mon Profil</button>
       <button class="menu-item" id="menuAdmin" style="display:none;" onclick="navigateTo('adminPage'); closeMenu();">🛠️ Dashboard Admin</button>
       <button class="menu-item" id="menuConnexion" onclick="navigateTo('authPage'); closeMenu();">🔑 Connexion</button>
@@ -819,7 +1150,48 @@
       <span>Total :</span>
       <span id="cartTotalValue">0 Ar</span>
     </div>
-    <button class="btn-checkout" onclick="processOrderCheckout()">Commander & Valider</button>
+    <button class="btn-checkout" onclick="openCheckoutModal()">Commander & Valider</button>
+  </div>
+
+  <!-- 🛒 CHECKOUT MODAL (Address Collection) -->
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeCheckoutModal()">✕</span>
+      <h2 style="margin-bottom: 20px;">📦 Finaliser la Commande</h2>
+      
+      <form onsubmit="processOrderCheckout(event)">
+        <div class="checkout-section">
+          <h3>Informations de Livraison</h3>
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" id="checkoutName" placeholder="Votre nom complet" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="checkoutEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" id="checkoutPhone" placeholder="Votre numéro de téléphone" required>
+          </div>
+          <div class="form-group">
+            <label>Adresse de Livraison</label>
+            <textarea id="checkoutAddress" placeholder="Rue, numéro, quartier, ville..." rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <h3>Résumé de la Commande</h3>
+          <div id="checkoutItemsSummary"></div>
+          <div class="cart-total-row">
+            <span>Total :</span>
+            <span id="checkoutTotal">0 Ar</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-checkout">✓ Confirmer et Passer la Commande</button>
+      </form>
+    </div>
   </div>
 
   <!-- 👤 PROFILE MODAL -->
@@ -860,7 +1232,7 @@
           </div>
           <div class="form-group">
             <label>Nouveau mot de passe</label>
-            <input type="password" id="newPassword" placeholder="••••••••" required>
+            <input type="password" id="newPassword" placeholder="••••��•••" required>
           </div>
           <div class="form-group">
             <label>Confirmer le mot de passe</label>
@@ -910,6 +1282,9 @@
         </div>
         <button type="submit" class="btn-action" id="authSubmitBtn">Connexion</button>
       </form>
+      <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 15px;">
+        💡 Les visiteurs peuvent aussi ajouter des articles au panier et passer commande sans compte.
+      </p>
     </div>
   </div>
 
@@ -920,6 +1295,7 @@
         <div class="search-row">
           <input type="text" class="search-input" id="searchField" placeholder="🔍 Rechercher un article par son nom..." oninput="renderStorefront()">
         </div>
+        <div class="category-filter" id="categoryFilter"></div>
         <div class="products-grid" id="productsDisplayGrid"></div>
       </div>
     </div>
@@ -939,13 +1315,34 @@
           <input type="number" id="prodPrice" placeholder="Ex: 65000">
         </div>
         <div class="form-group">
-          <label for="prodImageFile">Image de l'article</label>
-          <input type="file" id="prodImageFile" accept="image/*">
+          <label for="prodCategory">Catégorie</label>
+          <select id="prodCategory" required>
+            <option value="">-- Sélectionner une catégorie --</option>
+            <option value="Fashion">👔 Fashion</option>
+            <option value="Kitchen">🍳 Kitchen</option>
+            <option value="Electronic">💻 Electronic</option>
+            <option value="Sports">⚽ Sports</option>
+            <option value="Books">📚 Books</option>
+            <option value="Home">🏠 Home</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="prodDesc">Description technique</label>
           <textarea id="prodDesc" rows="3" placeholder="Caractéristiques de l'article..."></textarea>
         </div>
+
+        <div class="gallery-images">
+          <label style="font-weight: bold; margin-bottom: 10px; display: block;">📸 Galerie d'Images (principale + additionnelles)</label>
+          <div id="imagesContainer"></div>
+          <button type="button" class="btn-add-image" onclick="addImageField()">+ Ajouter une image</button>
+        </div>
+
+        <div class="form-group">
+          <label>Variantes du Produit (Couleurs, Tailles, etc.)</label>
+          <div id="variantsContainer"></div>
+          <button type="button" class="btn-add-variant" onclick="addVariantField()">+ Ajouter une variante</button>
+        </div>
+
         <button class="btn-action" style="background-color: var(--success);" onclick="processAdminUpload()">Publier l'article</button>
       </div>
       <div class="admin-card">
@@ -955,8 +1352,10 @@
             <thead>
               <tr>
                 <th>Client / Contact</th>
+                <th>Adresse de Livraison</th>
                 <th>Articles Commandés</th>
-                <th>Total Facturé</th>
+                <th>Total</th>
+                <th>Statut</th>
               </tr>
             </thead>
             <tbody id="adminOrderTableBody">
@@ -973,7 +1372,7 @@
       <button class="btn-action" style="background-color: var(--border); color: var(--text); max-width: 200px;" onclick="navigateTo('storefrontPage')">← Retour à la boutique</button>
     </div>
     <div id="printArea">
-      <div class="invoice-box" id="invoiceContent"></div>
+      <div id="invoiceContent"></div>
     </div>
     <div style="text-align: center;">
       <button class="btn-print" onclick="window.print()">🖨️ Imprimer la Facture</button>
@@ -999,6 +1398,12 @@
     let shoppingCart = [];
     let currentAuthMode = "login";
     let currentOrder = null;
+    let variantFieldCount = 0;
+    let imageFieldCount = 0;
+    let selectedCategory = "All";
+
+    const categories = ["All", "Fashion", "Kitchen", "Electronic", "Sports", "Books", "Home"];
+    const categoryEmojis = { "Fashion": "👔", "Kitchen": "🍳", "Electronic": "💻", "Sports": "⚽", "Books": "📚", "Home": "🏠", "All": "📦" };
 
     // 2. MENU FUNCTIONS
     function toggleMenu() {
@@ -1029,14 +1434,24 @@
       document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       updateMenuVisibility();
+      if (pageId === 'storefrontPage') renderStorefront();
+      if (pageId === 'adminPage') renderAdminDashboard();
     }
 
     function updateMenuVisibility() {
-      document.getElementById("menuBoutique").style.display = currentUser ? "flex" : "none";
       document.getElementById("menuProfil").style.display = currentUser ? "flex" : "none";
       document.getElementById("menuAdmin").style.display = (currentUser && currentUser.isAdmin) ? "flex" : "none";
       document.getElementById("menuConnexion").style.display = currentUser ? "none" : "flex";
       document.getElementById("menuDeconnexion").style.display = currentUser ? "flex" : "none";
+
+      const deleteButtons = document.querySelectorAll('.btn-delete-product');
+      deleteButtons.forEach(btn => {
+        if (currentUser && currentUser.isAdmin) {
+          btn.classList.add('admin-visible');
+        } else {
+          btn.classList.remove('admin-visible');
+        }
+      });
     }
 
     function switchAuthTab(mode) {
@@ -1102,8 +1517,27 @@
       closeMenu();
     }
 
-    // 6. VITRINE COMMERCIALE
+    // 6. CATEGORY FILTER
+    function renderCategoryFilter() {
+      const filterDiv = document.getElementById("categoryFilter");
+      filterDiv.innerHTML = "";
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `category-btn ${cat === selectedCategory ? 'active' : ''}`;
+        btn.textContent = `${categoryEmojis[cat]} ${cat}`;
+        btn.onclick = () => {
+          selectedCategory = cat;
+          renderCategoryFilter();
+          renderStorefront();
+        };
+        filterDiv.appendChild(btn);
+      });
+    }
+
+    // 7. VITRINE COMMERCIALE
     function renderStorefront() {
+      renderCategoryFilter();
       const grid = document.getElementById("productsDisplayGrid");
       const searchQuery = document.getElementById("searchField").value.toLowerCase().trim();
       grid.innerHTML = "";
@@ -1113,54 +1547,138 @@
         return;
       }
 
-      const filtered = inventory.filter(item => item.title.toLowerCase().includes(searchQuery));
+      let filtered = inventory.filter(item => 
+        item.title.toLowerCase().includes(searchQuery) &&
+        (selectedCategory === "All" || item.category === selectedCategory)
+      );
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">Aucun produit trouvé dans cette catégorie.</div>';
+        return;
+      }
+
       filtered.forEach(item => {
+        const deleteBtn = currentUser && currentUser.isAdmin ? `<button class="btn-delete-product admin-visible" onclick="deleteProduct(${item.id})">🗑️</button>` : '';
+        const mainImage = item.images && item.images.length > 0 ? item.images[0] : "https://picsum.photos/300/300?random=" + item.id;
         grid.innerHTML += `
           <div class="product-card">
-            <img src="${item.img}" alt="${item.title}" class="product-img" onclick="viewFullImage('${item.img}')">
+            <div class="product-img-wrapper">
+              <img src="${mainImage}" alt="${item.title}" class="product-img" onclick="viewFullImage('${mainImage}')">
+              ${deleteBtn}
+            </div>
             <div class="product-info">
               <div>
-                <div class="product-title">${item.title}</div>
+                <div class="product-header">
+                  <div class="product-title">${item.title}</div>
+                </div>
                 <div class="product-desc">${item.desc}</div>
               </div>
               <div class="product-footer">
-                <div class="product-price">${item.price.toLocaleString()} Ar</div>
+                <div>
+                  <div class="product-price">${item.price.toLocaleString()} Ar</div>
+                </div>
                 <button class="btn-add-cart" onclick="addItemToBasket(${item.id})">Acheter</button>
               </div>
             </div>
           </div>`;
       });
+      updateMenuVisibility();
     }
 
-    // 7. PANIER
+    // 8. PANIER
     function addItemToBasket(productId) {
-      if (!currentUser) {
-        alert("Veuillez vous connecter pour ajouter des articles à votre panier.");
-        navigateTo("authPage");
-        return;
-      }
       const item = inventory.find(i => i.id === productId);
-      const matched = shoppingCart.find(i => i.id === productId);
-      if (matched) matched.quantity++;
-      else shoppingCart.push({ ...item, quantity: 1 });
+      if (!item) return;
+
+      if (item.variants && item.variants.length > 0) {
+        showVariantSelectionModal(item);
+      } else {
+        addToCart(item, {});
+      }
+    }
+
+    function showVariantSelectionModal(product) {
+      const variantGroups = {};
+      product.variants.forEach(v => {
+        if (!variantGroups[v.type]) variantGroups[v.type] = [];
+        variantGroups[v.type].push(v.value);
+      });
+
+      let variantHTML = '<div class="checkout-section">';
+      Object.entries(variantGroups).forEach(([type, values]) => {
+        variantHTML += `
+          <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; color: var(--text-muted); margin-bottom: 10px; display: block;">${type}</label>
+            <div class="variant-selector" id="select_${type}">
+              ${values.map(v => `<button type="button" class="variant-option" onclick="selectVariant('${type}', '${v}')">${v}</button>`).join('')}
+            </div>
+          </div>`;
+      });
+      variantHTML += '</div>';
+
+      const tempModal = document.createElement('div');
+      tempModal.className = 'modal open';
+      tempModal.innerHTML = `
+        <div class="modal-content">
+          <span class="modal-close" onclick="this.closest('.modal').remove()">✕</span>
+          <h2 style="margin-bottom: 20px;">Sélectionner les Options</h2>
+          ${variantHTML}
+          <button type="button" class="btn-checkout" onclick="confirmVariantSelection(${product.id}, this.closest('.modal'))">Ajouter au Panier</button>
+        </div>
+      `;
+      document.body.appendChild(tempModal);
+      window.currentSelectedVariants = {};
+    }
+
+    function selectVariant(type, value) {
+      if (!window.currentSelectedVariants) window.currentSelectedVariants = {};
+      window.currentSelectedVariants[type] = value;
+      
+      document.querySelectorAll(`#select_${type} .variant-option`).forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      event.target.classList.add('selected');
+    }
+
+    function confirmVariantSelection(productId, modalElement) {
+      const product = inventory.find(p => p.id === productId);
+      addToCart(product, window.currentSelectedVariants || {});
+      modalElement.remove();
+      window.currentSelectedVariants = {};
+    }
+
+    function addToCart(product, variants) {
+      const cartItem = {
+        ...product,
+        cartItemId: Date.now(),
+        selectedVariants: variants
+      };
+      shoppingCart.push(cartItem);
+      syncBasketUI();
+      alert(`${product.title} ajouté au panier!`);
+    }
+
+    function increaseQuantity(cartItemId) {
+      const item = shoppingCart.find(i => i.cartItemId === cartItemId);
+      if (item) item.quantity = (item.quantity || 1) + 1;
       syncBasketUI();
     }
 
-    function increaseQuantity(productId) {
-      const item = shoppingCart.find(i => i.id === productId);
-      if (item) item.quantity++;
+    function decreaseQuantity(cartItemId) {
+      const item = shoppingCart.find(i => i.cartItemId === cartItemId);
+      if (item) {
+        if ((item.quantity || 1) > 1) {
+          item.quantity = (item.quantity || 1) - 1;
+        } else {
+          dropUnitFromBasket(cartItemId);
+          return;
+        }
+      }
       syncBasketUI();
     }
 
-    function decreaseQuantity(productId) {
-      const item = shoppingCart.find(i => i.id === productId);
-      if (item && item.quantity > 1) item.quantity--;
-      else dropUnitFromBasket(productId);
-      syncBasketUI();
-    }
-
-    function dropUnitFromBasket(productId) {
-      shoppingCart = shoppingCart.filter(item => item.id !== productId);
+    function dropUnitFromBasket(cartItemId) {
+      shoppingCart = shoppingCart.filter(item => item.cartItemId !== cartItemId);
       syncBasketUI();
     }
 
@@ -1174,20 +1692,23 @@
         document.getElementById("cartBadge").style.display = "none";
       } else {
         shoppingCart.forEach(item => {
-          totalCount += item.quantity;
-          billSum += (item.price * item.quantity);
+          const qty = item.quantity || 1;
+          totalCount += qty;
+          billSum += (item.price * qty);
+          const variantDisplay = Object.entries(item.selectedVariants || {}).map(([k, v]) => `${k}: ${v}`).join(', ');
           container.innerHTML += `
             <div class="cart-item">
               <div class="cart-item-info">
                 <strong>${item.title}</strong>
                 <span class="cart-item-qty">${item.price.toLocaleString()} Ar</span>
+                ${variantDisplay ? `<div class="cart-item-variant">${variantDisplay}</div>` : ''}
                 <div class="quantity-controls">
-                  <button class="qty-btn" onclick="decreaseQuantity(${item.id})">−</button>
-                  <span class="qty-display">${item.quantity}</span>
-                  <button class="qty-btn" onclick="increaseQuantity(${item.id})">+</button>
+                  <button class="qty-btn" onclick="decreaseQuantity(${item.cartItemId})">−</button>
+                  <span class="qty-display">${qty}</span>
+                  <button class="qty-btn" onclick="increaseQuantity(${item.cartItemId})">+</button>
                 </div>
               </div>
-              <button class="btn-remove-item" onclick="dropUnitFromBasket(${item.id})">🗑️</button>
+              <button class="btn-remove-item" onclick="dropUnitFromBasket(${item.cartItemId})">🗑️</button>
             </div>`;
         });
         document.getElementById("cartBadge").innerText = totalCount;
@@ -1197,21 +1718,76 @@
       document.getElementById("cartTotalValue").innerText = billSum.toLocaleString() + " Ar";
     }
 
-    // 8. COMMANDE
-    function processOrderCheckout() {
+    // 9. COMMANDE
+    function openCheckoutModal() {
       if (shoppingCart.length === 0) {
         alert("Votre panier est vide.");
         return;
       }
+
+      if (currentUser) {
+        document.getElementById("checkoutName").value = currentUser.name || '';
+        document.getElementById("checkoutEmail").value = currentUser.email || '';
+        document.getElementById("checkoutPhone").value = currentUser.phone || '';
+      } else {
+        document.getElementById("checkoutName").value = '';
+        document.getElementById("checkoutEmail").value = '';
+        document.getElementById("checkoutPhone").value = '';
+      }
+
+      let summaryHTML = '';
+      shoppingCart.forEach(item => {
+        const qty = item.quantity || 1;
+        const variantDisplay = Object.entries(item.selectedVariants || {}).map(([k, v]) => `${k}: ${v}`).join(', ');
+        summaryHTML += `
+          <div style="padding: 10px; border-bottom: 1px solid var(--border); font-size: 13px;">
+            <div><strong>${item.title}</strong> × ${qty}</div>
+            ${variantDisplay ? `<div style="color: var(--text-muted); font-size: 12px;">${variantDisplay}</div>` : ''}
+            <div style="color: var(--accent); font-weight: bold;">${(item.price * qty).toLocaleString()} Ar</div>
+          </div>`;
+      });
+      document.getElementById("checkoutItemsSummary").innerHTML = summaryHTML;
+      document.getElementById("checkoutTotal").innerText = document.getElementById("cartTotalValue").innerText;
+
+      document.getElementById("checkoutModal").classList.add("open");
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById("checkoutModal").classList.remove("open");
+    }
+
+    function processOrderCheckout(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById("checkoutName").value.trim();
+      const email = document.getElementById("checkoutEmail").value.trim();
+      const phone = document.getElementById("checkoutPhone").value.trim();
+      const address = document.getElementById("checkoutAddress").value.trim();
+
+      if (!name || !email || !phone || !address) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      const totalPrice = document.getElementById("cartTotalValue").innerText;
       const newOrder = {
         orderId: "AQ-" + Date.now(),
-        clientName: currentUser.name,
-        clientEmail: currentUser.email,
-        clientPhone: currentUser.phone,
-        items: [...shoppingCart],
-        totalPrice: document.getElementById("cartTotalValue").innerText,
-        date: new Date().toLocaleDateString('fr-FR')
+        clientName: name,
+        clientEmail: email,
+        clientPhone: phone,
+        clientAddress: address,
+        items: shoppingCart.map(item => ({
+          id: item.id,
+          title: item.title,
+          price: item.price,
+          quantity: item.quantity || 1,
+          selectedVariants: item.selectedVariants || {}
+        })),
+        totalPrice: totalPrice,
+        date: new Date().toLocaleDateString('fr-FR'),
+        delivered: false
       };
+
       orders.push(newOrder);
       currentOrder = newOrder;
       saveToLocalStorage();
@@ -1219,50 +1795,76 @@
       shoppingCart = [];
       syncBasketUI();
       closeCart();
+      closeCheckoutModal();
       navigateTo("invoicePage");
     }
 
     function generatePrintableInvoice(order) {
       const container = document.getElementById("invoiceContent");
-      let itemsLines = "";
+      let itemsHTML = "";
+      let totalItems = 0;
       order.items.forEach(item => {
-        itemsLines += `
+        totalItems += item.quantity;
+        const variantDisplay = Object.entries(item.selectedVariants || {}).map(([k, v]) => `<tr><td colspan="3" style="font-size: 11px; color: #666; padding: 4px 12px;">${k}: <strong>${v}</strong></td></tr>`).join('');
+        itemsHTML += `
           <tr>
-            <td style="padding:8px; border-bottom:1px solid #eee;">${item.title}</td>
-            <td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${item.quantity}</td>
-            <td style="padding:8px; border-bottom:1px solid #eee; text-align:right;">${(item.price * item.quantity).toLocaleString()} Ar</td>
-          </tr>`;
+            <td style="padding: 12px;">${item.title}</td>
+            <td style="text-align: center; padding: 12px;">${item.quantity}</td>
+            <td style="text-align: right; padding: 12px;">${(item.price * item.quantity).toLocaleString()} Ar</td>
+          </tr>
+          ${variantDisplay}`;
       });
+
       container.innerHTML = `
-        <div class="invoice-header">
-          <div>
-            <h1 style="font-size:26px;">AQ SHOP</h1>
-            <p style="font-size:12px; color:#555;">Antananarivo, Madagascar</p>
+        <div class="invoice-box">
+          <div class="invoice-header">
+            <h1>🛍️ AQ SHOP</h1>
+            <p>Antananarivo, Madagascar</p>
+            <p>FACTURE DE COMMANDE</p>
           </div>
-          <div style="text-align:right;">
-            <h2 style="font-size:18px; color:var(--accent);">FACTURE</h2>
-            <p style="font-size:13px;"><b>N° :</b> ${order.orderId}</p>
-            <p style="font-size:13px;"><b>Date :</b> ${order.date}</p>
+
+          <div class="invoice-details">
+            <div class="invoice-detail-item">
+              <div class="invoice-section-title">Informations Client</div>
+              <p><strong>Nom:</strong> ${order.clientName}</p>
+              <p><strong>Email:</strong> ${order.clientEmail}</p>
+              <p><strong>Téléphone:</strong> ${order.clientPhone}</p>
+            </div>
+            <div class="invoice-detail-item">
+              <div class="invoice-section-title">Détails de la Commande</div>
+              <p><strong>Numéro:</strong> ${order.orderId}</p>
+              <p><strong>Date:</strong> ${order.date}</p>
+              <p><strong>Statut:</strong> ${order.delivered ? '<span class="status-delivered">✓ LIVRÉE</span>' : 'En traitement'}</p>
+            </div>
           </div>
-        </div>
-        <div style="margin-bottom:25px; font-size:14px;">
-          <p><b>Facturé à :</b> ${order.clientName}</p>
-          <p><b>Email :</b> ${order.clientEmail}</p>
-          <p><b>Téléphone :</b> ${order.clientPhone}</p>
-        </div>
-        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
-          <thead>
-            <th style="text-align:left; border-bottom:2px solid #000; padding:8px;">Désignation</th>
-            <th style="text-align:center; border-bottom:2px solid #000; padding:8px;">Qté</th>
-            <th style="text-align:right; border-bottom:2px solid #000; padding:8px;">Prix Total</th>
-          </thead>
-          <tbody>${itemsLines}</tbody>
-        </table>
-        <div style="text-align:right; font-size:18px; font-weight:bold; margin-top:20px; border-top:2px solid #000; padding-top:10px;">
-          Montant Total Net : ${order.totalPrice}
-        </div>
-        <div style="margin-top:40px; font-size:11px; text-align:center; color:#555; border-top:1px dashed #ccc; padding-top:15px;">
-          Merci pour votre confiance chez AQ Shop !
+
+          <div class="invoice-section">
+            <div class="invoice-section-title">Adresse de Livraison</div>
+            <p style="line-height: 1.8; font-size: 13px;">${order.clientAddress.replace(/\n/g, '<br>')}</p>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Désignation / Articles</th>
+                <th style="text-align: center;">Quantité</th>
+                <th style="text-align: right;">Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHTML}
+            </tbody>
+          </table>
+
+          <div class="invoice-total">
+            Montant Total: <span style="color: #0f172a;">${order.totalPrice}</span>
+          </div>
+
+          <div class="invoice-footer">
+            <p>Merci de votre confiance chez AQ Shop!</p>
+            <p>Pour toute question: 038 17 629 84 | 037 92 808 01</p>
+            <p style="margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">© 2026 AQ Shop. Tous droits réservés.</p>
+          </div>
         </div>`;
     }
 
@@ -1279,16 +1881,24 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // 9. ADMIN DASHBOARD
+    // 10. ADMIN DASHBOARD
     function renderAdminDashboard() {
       const tbody = document.getElementById("adminOrderTableBody");
       tbody.innerHTML = "";
       if (orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Aucune commande enregistrée.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aucune commande enregistrée.</td></tr>`;
         return;
       }
-      orders.forEach(order => {
-        let itemsSummary = order.items.map(i => `${i.title} (x${i.quantity})`).join(", ");
+      orders.forEach((order, index) => {
+        let itemsSummary = order.items.map(i => {
+          const variantDisplay = Object.entries(i.selectedVariants || {}).map(([k, v]) => `${k}: ${v}`).join(', ');
+          return `${i.title} (x${i.quantity})${variantDisplay ? ` [${variantDisplay}]` : ''}`;
+        }).join("<br>");
+        
+        const statusHTML = order.delivered 
+          ? '<span class="status-delivered">✓ LIVRÉE</span>'
+          : `<button class="btn-delivered" onclick="markAsDelivered(${index})">Marquer Livrée</button>`;
+
         tbody.innerHTML += `
           <tr>
             <td>
@@ -1296,42 +1906,147 @@
               <span style="color:var(--accent); font-weight:bold;">📞 ${order.clientPhone}</span><br>
               <span style="font-size:11px; color:var(--text-muted);">${order.clientEmail}</span>
             </td>
-            <td style="color:var(--text-muted);">${itemsSummary}</td>
+            <td style="font-size:12px;">${order.clientAddress}</td>
+            <td style="color:var(--text-muted); font-size:12px;">${itemsSummary}</td>
             <td style="font-weight:bold; color:var(--success);">${order.totalPrice}</td>
+            <td>${statusHTML}</td>
           </tr>`;
       });
+    }
+
+    function markAsDelivered(orderIndex) {
+      orders[orderIndex].delivered = true;
+      saveToLocalStorage();
+      renderAdminDashboard();
+      alert("Commande marquée comme livrée ✓");
+    }
+
+    function addImageField() {
+      const container = document.getElementById("imagesContainer");
+      const fieldId = imageFieldCount++;
+      const fieldHTML = `
+        <div class="gallery-item" id="image_${fieldId}">
+          <input type="file" accept="image/*" class="image-input" id="imageInput_${fieldId}" onchange="previewImage(${fieldId})">
+          <img id="preview_${fieldId}" class="gallery-preview" style="display:none;" alt="Preview">
+          <button type="button" class="btn-remove-variant" onclick="removeImageField(${fieldId})">Supprimer</button>
+        </div>`;
+      container.innerHTML += fieldHTML;
+    }
+
+    function previewImage(fieldId) {
+      const input = document.getElementById(`imageInput_${fieldId}`);
+      const preview = document.getElementById(`preview_${fieldId}`);
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function removeImageField(fieldId) {
+      document.getElementById(`image_${fieldId}`).remove();
+    }
+
+    function addVariantField() {
+      const container = document.getElementById("variantsContainer");
+      const fieldId = variantFieldCount++;
+      const fieldHTML = `
+        <div class="variant-item" id="variant_${fieldId}">
+          <input type="text" placeholder="Type (ex: Couleur)" class="variant-type" style="flex: 1;">
+          <input type="text" placeholder="Valeur (ex: Rouge, Bleu)" class="variant-value" style="flex: 1;">
+          <button type="button" class="btn-remove-variant" onclick="removeVariantField(${fieldId})">Supprimer</button>
+        </div>`;
+      container.innerHTML += fieldHTML;
+    }
+
+    function removeVariantField(fieldId) {
+      document.getElementById(`variant_${fieldId}`).remove();
     }
 
     function processAdminUpload() {
       const title = document.getElementById("prodTitle").value.trim();
       const price = parseFloat(document.getElementById("prodPrice").value);
+      const category = document.getElementById("prodCategory").value.trim();
       const desc = document.getElementById("prodDesc").value.trim();
-      const fileInput = document.getElementById("prodImageFile");
-      if (!title || isNaN(price) || price <= 0 || !desc) {
-        alert("Veuillez remplir toutes les cases.");
+
+      if (!title || isNaN(price) || price <= 0 || !category || !desc) {
+        alert("Veuillez remplir toutes les cases obligatoires.");
         return;
       }
-      const saveItem = (imageSrc) => {
-        inventory.push({ id: Date.now(), title, price, desc, img: imageSrc });
-        saveToLocalStorage();
-        renderStorefront();
-        document.getElementById("prodTitle").value = "";
-        document.getElementById("prodPrice").value = "";
-        document.getElementById("prodDesc").value = "";
-        document.getElementById("prodImageFile").value = "";
-        alert(`L'article "${title}" a été publié.`);
-      };
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => saveItem(e.target.result);
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        saveItem("https://picsum.photos/300/300?random=" + Date.now());
+
+      const variants = [];
+      document.querySelectorAll('#variantsContainer .variant-item').forEach(item => {
+        const type = item.querySelector('.variant-type').value.trim();
+        const value = item.querySelector('.variant-value').value.trim();
+        if (type && value) {
+          variants.push({ type, value });
+        }
+      });
+
+      const images = [];
+      document.querySelectorAll('#imagesContainer .image-input').forEach(input => {
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            images.push(e.target.result);
+            if (images.length === document.querySelectorAll('#imagesContainer .image-input').length) {
+              saveProduct(title, price, category, desc, variants, images);
+            }
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      });
+
+      if (images.length === 0) {
+        saveProduct(title, price, category, desc, variants, images);
       }
     }
 
-    // 10. PROFILE MODAL
+    function saveProduct(title, price, category, desc, variants, images) {
+      if (images.length === 0) {
+        images.push("https://picsum.photos/300/300?random=" + Date.now());
+      }
+
+      inventory.push({ 
+        id: Date.now(), 
+        title, 
+        price, 
+        category,
+        desc, 
+        images: images,
+        variants: variants
+      });
+      saveToLocalStorage();
+      renderStorefront();
+      document.getElementById("prodTitle").value = "";
+      document.getElementById("prodPrice").value = "";
+      document.getElementById("prodCategory").value = "";
+      document.getElementById("prodDesc").value = "";
+      document.getElementById("variantsContainer").innerHTML = "";
+      document.getElementById("imagesContainer").innerHTML = "";
+      variantFieldCount = 0;
+      imageFieldCount = 0;
+      alert(`L'article "${title}" a été publié.`);
+    }
+
+    function deleteProduct(productId) {
+      if (!confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) return;
+      inventory = inventory.filter(item => item.id !== productId);
+      saveToLocalStorage();
+      renderStorefront();
+      alert("Produit supprimé avec succès.");
+    }
+
+    // 11. PROFILE MODAL
     function openProfileModal() {
+      if (!currentUser) {
+        alert("Veuillez vous connecter d'abord.");
+        navigateTo("authPage");
+        return;
+      }
       document.getElementById("profileModal").classList.add("open");
       document.getElementById("profileName").value = currentUser.name;
       document.getElementById("profileEmail").value = currentUser.email;
@@ -1384,7 +2099,7 @@
       closeProfileModal();
     }
 
-    // 11. IMAGE MODAL
+    // 12. IMAGE MODAL
     function viewFullImage(src) {
       document.getElementById("fullImage").src = src;
       document.getElementById("imageModal").classList.add("open");
@@ -1395,7 +2110,7 @@
       document.getElementById("imageModal").classList.remove("open");
     }
 
-    // 12. THEME
+    // 13. THEME
     function toggleTheme() {
       const active = document.documentElement.getAttribute("data-theme");
       const target = active === "dark" ? "light" : "dark";
@@ -1403,7 +2118,7 @@
       localStorage.setItem("aq-shop-theme", target);
     }
 
-    // 13. PERSISTENCE
+    // 14. PERSISTENCE
     function saveToLocalStorage() {
       localStorage.setItem("aq-shop-inventory", JSON.stringify(inventory));
       localStorage.setItem("aq-shop-users", JSON.stringify(users));
@@ -1413,7 +2128,7 @@
       }
     }
 
-    // 14. INIT
+    // 15. INIT
     (function initSetup() {
       document.documentElement.setAttribute("data-theme", localStorage.getItem("aq-shop-theme") || "light");
       try {
